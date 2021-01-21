@@ -1,7 +1,8 @@
 const express = require("express");
 const Category = require("../../db").Category;
 const router = express.Router();
-
+const Article = require("../../db").Article;
+const Sequelize = require("sequelize");
 router
   .route("/")
   .get(async (req, res, next) => {
@@ -20,6 +21,19 @@ router
       next(error);
     }
   });
+
+router.route("/count").get(async (req, res, next) => {
+  try {
+    const articles = await Article.findAll({
+      include: Category,
+      attributes: [Sequelize.fn("count", Sequelize.col("categoryId")), "count"],
+      group: ["category.id"],
+    });
+    res.send(articles);
+  } catch (error) {
+    next(error);
+  }
+});
 
 router
   .route("/:id")

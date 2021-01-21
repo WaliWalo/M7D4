@@ -23,6 +23,10 @@ module.exports = (sequelize, DataTypes) => {
       through: "user_article",
       timestamps: false,
     });
+    User.belongsToMany(models.Article, {
+      through: { model: models.Review, unique: false },
+    });
+    User.hasMany(models.Review);
   };
   return User;
 };

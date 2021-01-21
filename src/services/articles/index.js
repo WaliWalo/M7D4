@@ -24,14 +24,24 @@ router
       //   limit: parseInt(req.query.limit) | 10,
       //   });
       const data = await Article.findAll({
-        include: {
-          model: User,
-          where: req.query.author
-            ? {
-                last_name: { [Op.iLike]: `%${req.query.author}%` },
-              }
-            : {},
-        },
+        include: [
+          {
+            model: User,
+            where: req.query.author
+              ? {
+                  last_name: { [Op.iLike]: `%${req.query.author}%` },
+                }
+              : {},
+          },
+          {
+            model: Category,
+            where: req.query.category
+              ? {
+                  name: { [Op.iLike]: `%${req.query.category}%` },
+                }
+              : {},
+          },
+        ],
         where: req.query.head_line
           ? { head_line: { [Op.iLike]: `%${req.query.head_line}%` } }
           : {},

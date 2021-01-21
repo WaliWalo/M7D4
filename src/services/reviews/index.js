@@ -1,25 +1,37 @@
 const express = require("express");
 const Review = require("../../db").Review;
 const router = express.Router();
+const User = require("../../db").User;
+const Article = require("../../db").Article;
 
-router
-  .route("/")
-  .get(async (req, res, next) => {
-    try {
-      const data = await Review.findAll();
-      res.send(data);
-    } catch (error) {
-      next(error);
-    }
-  })
-  .post(async (req, res, next) => {
-    try {
-      const newElement = await Review.create(req.body);
-      res.send(newElement);
-    } catch (error) {
-      next(error);
-    }
-  });
+router.route("/:articleId").get(async (req, res, next) => {
+  try {
+    const data = await Review.findAll({
+      include: [User, Article],
+    });
+    // const result = await {
+    //   ...data.values,
+    //   user: `${data.user.last_name} ${data.user.first_name}`,
+    //   article_head_line: data.article.head_line,
+    // };
+    res.send(data);
+  } catch (error) {
+    next(error);
+  }
+});
+
+router.route("/:articleId/:userId").post(async (req, res, next) => {
+  try {
+    const newElement = await Review.create({
+      ...req.body,
+      userId: req.params.articleId,
+      articleId: req.params.articleId,
+    });
+    res.send(newElement);
+  } catch (error) {
+    next(error);
+  }
+});
 
 router
   .route("/:id")

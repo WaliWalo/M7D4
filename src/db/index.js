@@ -2,6 +2,7 @@ const { Sequelize, DataTypes } = require("sequelize");
 const User = require("./user");
 const Category = require("./category");
 const Article = require("./article");
+const Review = require("./review");
 const sequelize = new Sequelize(
   process.env.PGDATABASE,
   process.env.PGUSER,
@@ -16,6 +17,7 @@ const models = {
   User: User(sequelize, DataTypes),
   Category: Category(sequelize, DataTypes),
   Article: Article(sequelize, DataTypes),
+  Review: Review(sequelize, DataTypes),
 };
 
 Object.keys(models).forEach((model_name) => {

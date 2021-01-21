@@ -10,5 +10,9 @@ module.exports = (sequelize, DataTypes) => {
       allowNull: false,
     },
   });
+  Review.associate = (models) => {
+    Review.belongsTo(models.User);
+    Review.belongsTo(models.Article);
+  };
   return Review;
 };
