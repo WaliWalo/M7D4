@@ -69,14 +69,17 @@ router
 router.route("/postArticle/:userId").post(async (req, res, next) => {
   try {
     let user = await User.findByPk(req.params.userId);
-    Article.create(req.body)
-      .then((article) => {
-        user.addArticles(article);
-      })
-      .then(() => {
-        res.send(`Article added by ${user.last_name}`);
-      })
-      .catch((error) => console.log(error));
+    // Article.create(req.body)
+    //   .then( (article) => user.addArticles(article))
+    //   .then((user) => {
+    //     res.send(`Article added by ${user.last_name}`);
+    //   })
+    //   .catch((error) => console.log(error));
+
+    const article = await Article.create(req.body);
+    await user.addArticles(article);
+
+    res.send(`Article added by ${user.last_name}`);
   } catch (error) {
     console.log(error);
     next(error);
